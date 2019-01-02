@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- this is the head -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Lecture 62</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            text-align: center;
+        }
+        table {
+            margin: 15px auto;
+            font-size: 6.0em;
+        }
+        td {
+            width: 160px;
+            height: 160px;
+        }
+        .center-top, .center-bot {
+            border-left: 2px solid black;
+            border-right: 2px solid black;
+        }
+        .center-mid {
+            border: 2px solid black;
+        }
+        .center-left, .center-right {
+            border-top: 2px solid black;
+            border-bottom: 2px solid black;
+        }
+        p, h4 {
+            font-size: 3.0em;
+        }
+        button {
+            width: 36%;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body onload='restart()'>
+
+    <h2>TIC TAC TOE</h2>
+    <h4><span id='turnPlayer'></span> Player's Turn</h4>
+    
+    <table>
+        <tr>
+            <td id='one'></td>
+            <td id='two' class='center-top'></td>
+            <td id='three'></td>
+        </tr>
+        <tr>
+            <td id='four' class='center-left'></td>
+            <td id='five' class='center-mid'></td>
+            <td id='six' class='center-right'></td>
+        </tr>
+        <tr>
+            <td id='seven'></td>
+            <td id='eight' class='center-bot'></td>
+            <td id='nine'></td>
+        </tr>
+    </table>
+
+    <p>Winner is: <span id='winner'></span></p>
+    <button onclick='restart()'>New Game</button>
+
+
+    <script>
+        let xPlayersTurn = true;
+        let turnPlayer = document.getElementById('turnPlayer');
+        let tableCells = Array.from(document.getElementsByTagName('td'));
+        let board = [
+            ['','',''],
+            ['','',''],
+            ['','','']
+        ];
+        let winner = document.getElementById('winner');
+        let cell1 = document.getElementById('one');
+        let cell2 = document.getElementById('two');
+        let cell3 = document.getElementById('three');
+        let cell4 = document.getElementById('four');
+        let cell5 = document.getElementById('five');
+        let cell6 = document.getElementById('six');
+        let cell7 = document.getElementById('seven');
+        let cell8 = document.getElementById('eight');
+        let cell9 = document.getElementById('nine');
+        let keepGoing = true;
+
+        document.addEventListener('click', function(event) {
+            if (keepGoing){
+                if (event.target.tagName === 'TD') {
+                    if (!event.target.innerText) {
+                        if (xPlayersTurn) event.target.innerText = 'X';
+                        else event.target.innerText = 'O'; 
+                        
+                        let marker = event.target.innerText;
+                        switch(event.target.id) {
+                            case 'one':
+                                board[0][0] = marker;
+                                break;
+                            case 'two':
+                                board[0][1] = marker;
+                                break;
+                            case 'three':
+                                board[0][2] = marker;
+                                break;
+                            case 'four':
+                                board[1][0] = marker;
+                                break;
+                            case 'five': 
+                                board[1][1] = marker;
+                                break;
+                            case 'six': 
+                                board[1][2] = marker;
+                                break;
+                            case 'seven': 
+                                board[2][0] = marker;
+                                break;
+                            case 'eight': 
+                                board[2][1] = marker;
+                                break;
+                            case 'nine': 
+                                board[2][2] = marker;
+                                break;
+                        }
+
+                        checkWinner();
+                        xPlayersTurn = !xPlayersTurn;
+                        turnPlayer.innerText = (xPlayersTurn) ? 'X' : 'O';
+                    }
+                }
+            }
+        });
+
+
+        function restart() {
+            tableCells.forEach(element => {
+                element.innerText = '';
+                element.style.textDecoration = 'none';
+                element.style.color = 'black';
+            });
+            xPlayersTurn = true;
+            turnPlayer.innerText = (xPlayersTurn) ? 'X' : 'O';
+            winner.innerText = '';
+            board = [['','',''],['','',''],['','','']];
+            keepGoing = true;
+        }
+
+        function checkWinner() {
+            checkHorizontal();
+            checkVertical();
+            checkAcross();
+        }
+
+
+        function checkHorizontal() {
+            if (board[0][0] === board[0][1] && board[0][1] === board[0][2] && board[0][0] === board[0][2]) {
+                if (board[0][0]) {
+                    winner.innerText = (xPlayersTurn) ? 'X' : 'O';
+                    cell1.style.textDecoration = 'line-through';
+                    cell1.style.color = 'grey';
+                    cell2.style.textDecoration = 'line-through';
+                    cell2.style.color = 'grey';
+                    cell3.style.textDecoration = 'line-through';
+                    cell3.style.color = 'grey';
+                    keepGoing = false;
+                    return;
+                }
+            }
+            if (board[1][0] === board[1][1] && board[1][1] === board[1][2] && board[1][0] === board[1][2]) {
+                if (board[1][0]) {
+                    winner.innerText = (xPlayersTurn) ? 'X' : 'O';
+                    cell4.style.textDecoration = 'line-through';
+                    cell4.style.color = 'grey';
+                    cell5.style.textDecoration = 'line-through';
+                    cell5.style.color = 'grey';
+                    cell6.style.textDecoration = 'line-through';
+                    cell6.style.color = 'grey';
+                    keepGoing = false;
+                    return;
+                }
+            }
+            if (board[2][0] === board[2][1] && board[2][1] === board[2][2] && board[2][0] === board[2][2]) {
+                if (board[2][0]) {
+                    winner.innerText = (xPlayersTurn) ? 'X' : 'O';
+                    cell7.style.textDecoration = 'line-through';
+                    cell7.style.color = 'grey';
+                    cell8.style.textDecoration = 'line-through';
+                    cell8.style.color = 'grey';
+                    cell9.style.textDecoration = 'line-through';
+                    cell9.style.color = 'grey';
+                    keepGoing = false;
+                    return;
+                }
+            }
+
+        }
+
+        function checkVertical() {
+            if (board[0][0] === board[1][0] && board[1][0] === board[2][0] && board[0][0] === board[2][0]) {
+                if (board[0][0]) {
+                    winner.innerText = (xPlayersTurn) ? 'X' : 'O';
+                    cell1.style.textDecoration = 'line-through';
+                    cell1.style.color = 'grey';
+                    cell4.style.textDecoration = 'line-through';
+                    cell4.style.color = 'grey';
+                    cell7.style.textDecoration = 'line-through';
+                    cell7.style.color = 'grey';
+                    keepGoing = false;
+                    return;
+                }
+            }
+            if (board[0][1] === board[1][1] && board[1][1] === board[2][1] && board[0][1] === board[2][1]) {
+                if (board[0][1]) {
+                    winner.innerText = (xPlayersTurn) ? 'X' : 'O';
+                    cell2.style.textDecoration = 'line-through';
+                    cell2.style.color = 'grey';
+                    cell5.style.textDecoration = 'line-through';
+                    cell5.style.color = 'grey';
+                    cell8.style.textDecoration = 'line-through';
+                    cell8.style.color = 'grey';
+                    keepGoing = false;
+                    return;
+                }
+            }
+            if (board[0][2] === board[1][2] && board[1][2] === board[2][2] && board[0][2] === board[2][2]) {
+                if (board[0][2]) {
+                    winner.innerText = (xPlayersTurn) ? 'X' : 'O';
+                    cell3.style.textDecoration = 'line-through';
+                    cell3.style.color = 'grey';
+                    cell6.style.textDecoration = 'line-through';
+                    cell6.style.color = 'grey';
+                    cell9.style.textDecoration = 'line-through';
+                    cell9.style.color = 'grey';
+                    keepGoing = false;
+                    return;
+                }
+            }
+        }
+
+        function checkAcross() {
+            if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0] === board[2][2]) {
+                if (board[0][0]) {
+                    winner.innerText = (xPlayersTurn) ? 'X' : 'O';
+                    cell1.style.textDecoration = 'line-through';
+                    cell1.style.color = 'grey';
+                    cell5.style.textDecoration = 'line-through';
+                    cell5.style.color = 'grey';
+                    cell9.style.textDecoration = 'line-through';
+                    cell9.style.color = 'grey';
+                    keepGoing = false;
+                }
+            }
+            if (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[0][2] === board[2][0]) {
+                if (board[0][2]) {
+                    winner.innerText = (xPlayersTurn) ? 'X' : 'O';
+                    cell3.style.textDecoration = 'line-through';
+                    cell3.style.color = 'grey';
+                    cell5.style.textDecoration = 'line-through';
+                    cell5.style.color = 'grey';
+                    cell7.style.textDecoration = 'line-through';
+                    cell7.style.color = 'grey';
+                    keepGoing = false;
+                }
+            }
+
+            if (board[0][0] && board[0][1] && board[0][2] 
+            && board[1][0] && board[1][1] && board[1][2] 
+            && board[2][0] && board[2][1] && board[2][2]
+            && keepGoing === true) {
+                winner.innerText = 'DRAW!';
+                keepGoing = false;
+                return;
+            }
+        }
+    
+    
+    </script>
+</body>
+</html>
+    
